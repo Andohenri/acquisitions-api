@@ -49,14 +49,17 @@ The Docker workflow fails with "401 Unauthorized" because it needs an **Access T
 
 **Problem**: Linting fails in GitHub Actions but works locally
 **Solution**: Usually caused by line ending differences (Windows vs Linux)
+
 - ✅ **Fixed**: Added Git line ending configuration to the workflow
 
 **Problem**: Prettier formatting issues
 **Possible causes**:
+
 - Files were edited on Windows with CRLF line endings
 - Different Prettier version
 
 **To fix locally**:
+
 ```bash
 npm run format
 git add .
@@ -66,13 +69,15 @@ git commit -m "Fix formatting"
 ### Docker Build Issues:
 
 **Problem**: "401 Unauthorized: access token has insufficient scopes"
-**Solution**: 
+**Solution**:
+
 - ✅ **Fixed**: Updated workflow to use `DOCKER_ACCESS_TOKEN`
 - Make sure you're using an Access Token, not your password
 - Ensure the token has "Public Repo Read/Write" permissions
 
 **Problem**: Repository doesn't exist on Docker Hub
 **Solution**: Create the repository first:
+
 1. Go to Docker Hub
 2. Click "Create Repository"
 3. Name it: `acquisitions-api`
@@ -82,11 +87,13 @@ git commit -m "Fix formatting"
 
 **Problem**: Tests fail in CI but work locally
 **Common causes**:
+
 - Missing environment variables
 - Database connection issues
 - Different Node.js version
 
 **To debug**:
+
 1. Check the test artifacts uploaded by the workflow
 2. Ensure `TEST_DATABASE_URL` secret is set if needed
 3. Verify all dependencies are properly installed
@@ -126,6 +133,7 @@ git commit -m "Fix formatting"
 4. Make sure your Access Token has the right permissions
 
 For Docker Hub authentication issues specifically, double-check:
+
 - Username is correct (case-sensitive)
 - Using Access Token, not password
 - Token has "Public Repo Read/Write" permissions
