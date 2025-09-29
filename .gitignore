@@ -1,3 +1,19 @@
 node_modules/
 dist/
 .env
+
+# Environment files
+.env.local
+.env.development.local
+.env.production.local
+.env.prod
+
+# Docker volumes
+docker-volumes/
+
+# Kubernetes manifests (if auto-generated)
+k8s/
+
+# Logs
+logs/
+.neon_local/
