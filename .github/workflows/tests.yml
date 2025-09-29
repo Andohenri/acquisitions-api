@@ -1,0 +1,140 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    env:
+      NODE_ENV: test
+      NODE_OPTIONS: --experimental-vm-modules
+      ARCJET_ENV: development
+      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgres://test:test@localhost:5432/test_db' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: |
+          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Run tests and capture output
+          if npm test 2>&1 | tee test-output.txt; then
+            echo "✅ **All tests passed!**" >> $GITHUB_STEP_SUMMARY
+            TEST_STATUS="success"
+          else
+            echo "❌ **Some tests failed!**" >> $GITHUB_STEP_SUMMARY
+            TEST_STATUS="failed"
+            echo "::error::Test execution failed. Please check the test output for details."
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Output:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          tail -50 test-output.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          
+          # Exit with failure if tests failed
+          if [ "$TEST_STATUS" = "failed" ]; then
+            exit 1
+          fi
+
+      - name: Run tests with coverage
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Run tests with coverage and capture output
+          if npm run test:coverage 2>&1 | tee coverage-output.txt; then
+            echo "✅ **Coverage report generated successfully!**" >> $GITHUB_STEP_SUMMARY
+            
+            # Extract coverage summary if available
+            if grep -E "All files.*\|.*\|.*\|.*\|" coverage-output.txt > /dev/null; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### Coverage Summary:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              grep -A 10 "All files.*\|.*\|.*\|.*\|" coverage-output.txt | head -15 >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ **Coverage report generation encountered issues**" >> $GITHUB_STEP_SUMMARY
+            echo "::warning::Coverage report generation failed, but tests may have passed."
+          fi
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: |
+            coverage/
+            coverage-output.txt
+            test-output.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-output.txt
+            coverage-output.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Add failure annotations
+        if: failure()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Troubleshooting" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Test failures detected.** Here are some steps to help you debug:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Run tests locally:**" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "   npm test" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Run specific test files:**" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "   npm test -- path/to/specific/test.js" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Run tests in watch mode for development:**" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "   npm run test:watch" >> $GITHUB_STEP_SUMMARY
+          echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Check environment variables:**" >> $GITHUB_STEP_SUMMARY
+          echo "   - Ensure \`NODE_ENV=test\`" >> $GITHUB_STEP_SUMMARY
+          echo "   - Ensure \`DATABASE_URL\` is set correctly for tests" >> $GITHUB_STEP_SUMMARY
+          echo "   - Ensure \`NODE_OPTIONS=--experimental-vm-modules\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Final summary
+        if: success()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎉 Test Suite Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ All tests passed" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 Coverage report generated" >> $GITHUB_STEP_SUMMARY
+          echo "- 📁 Artifacts uploaded for 30 days retention" >> $GITHUB_STEP_SUMMARY

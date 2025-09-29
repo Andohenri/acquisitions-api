@@ -1,0 +1,113 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/acquisitions-api
+          tags: |
+            # Branch-based tags
+            type=ref,event=branch
+            # Commit SHA
+            type=sha,prefix={{branch}}-
+            # Latest tag for main branch
+            type=raw,value=latest,enable={{is_default_branch}}
+            # Production timestamp tag
+            type=raw,value=prod-{{date 'YYYYMMDD-HHmmss' tz='UTC'}},enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Acquisitions API
+            org.opencontainers.image.description=Backend API for acquisitions management
+            org.opencontainers.image.vendor=Acquisitions Team
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+
+      - name: Generate summary
+        run: |
+          echo "## 🐳 Docker Build and Push Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Docker image built and pushed successfully!**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Image Details:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repository:** \`${{ secrets.DOCKER_USERNAME }}/acquisitions-api\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platforms:** \`linux/amd64\`, \`linux/arm64\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Context:** Current repository" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Args:** \`NODE_ENV=production\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🏷️ Published Tags:" >> $GITHUB_STEP_SUMMARY
+          
+          # Extract and display tags
+          TAGS="${{ steps.meta.outputs.tags }}"
+          IFS=$'\n'
+          for tag in $TAGS; do
+            echo "- \`$tag\`" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Usage:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pull the image:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ secrets.DOCKER_USERNAME }}/acquisitions-api:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Run the container:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "docker run -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/acquisitions-api:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ⚙️ Build Features:" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏗️ **Multi-platform builds** (AMD64 & ARM64)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 **GitHub Actions cache** for faster builds" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏷️ **Automatic tagging** with branch, SHA, and timestamps" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 **Production-optimized** build configuration" >> $GITHUB_STEP_SUMMARY
+
+      - name: Image security scan info
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔒 Security Recommendations:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Consider running security scans on your Docker images:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Using Docker Scout:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "docker scout quickview ${{ secrets.DOCKER_USERNAME }}/acquisitions-api:latest" >> $GITHUB_STEP_SUMMARY
+          echo "docker scout cves ${{ secrets.DOCKER_USERNAME }}/acquisitions-api:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Using Trivy:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "trivy image ${{ secrets.DOCKER_USERNAME }}/acquisitions-api:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

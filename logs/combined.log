@@ -87,3 +87,23 @@
 {"level":"info","message":"::1 - - [29/Sep/2025:13:58:45 +0000] \"GET /api/users HTTP/1.1\" 200 372 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0\"","service":"acquisitions-api","timestamp":"2025-09-29T13:58:45.783Z"}
 {"level":"info","message":"Fetching all users","service":"acquisitions-api","timestamp":"2025-09-29T14:00:30.500Z"}
 {"level":"info","message":"::1 - - [29/Sep/2025:14:00:32 +0000] \"GET /api/users/ HTTP/1.1\" 200 372 \"-\" \"PostmanRuntime/7.48.0\"","service":"acquisitions-api","timestamp":"2025-09-29T14:00:32.270Z"}
+{"level":"info","message":"Root endpoint accessed","service":"acquisitions-api","timestamp":"2025-09-29T15:12:58.438Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:12:58 +0000] \"GET / HTTP/1.1\" 200 28 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:12:58.458Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:12:58 +0000] \"GET /health HTTP/1.1\" 200 73 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:12:58.609Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:12:58 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:12:58.760Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:12:59 +0000] \"GET /unknown-route HTTP/1.1\" 404 52 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:12:59.201Z"}
+{"level":"info","message":"Root endpoint accessed","service":"acquisitions-api","timestamp":"2025-09-29T15:17:24.863Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:17:24 +0000] \"GET / HTTP/1.1\" 200 28 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:17:24.882Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:17:24 +0000] \"GET /health HTTP/1.1\" 200 73 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:17:24.999Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:17:25 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:17:25.114Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:17:25 +0000] \"GET /unknown-route HTTP/1.1\" 404 52 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:17:25.214Z"}
+{"level":"info","message":"Root endpoint accessed","service":"acquisitions-api","timestamp":"2025-09-29T15:18:10.981Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:10 +0000] \"GET / HTTP/1.1\" 200 28 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:10.996Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:11 +0000] \"GET /health HTTP/1.1\" 200 73 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:11.069Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:11 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:11.147Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:11 +0000] \"GET /unknown-route HTTP/1.1\" 404 52 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:11.228Z"}
+{"level":"info","message":"Root endpoint accessed","service":"acquisitions-api","timestamp":"2025-09-29T15:18:55.880Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:55 +0000] \"GET / HTTP/1.1\" 200 28 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:55.892Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:55 +0000] \"GET /health HTTP/1.1\" 200 73 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:55.972Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:56 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:56.049Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [29/Sep/2025:15:18:56 +0000] \"GET /unknown-route HTTP/1.1\" 404 52 \"-\" \"-\"","service":"acquisitions-api","timestamp":"2025-09-29T15:18:56.123Z"}

@@ -15,3 +15,7 @@ k8s/
 # Logs
 logs/
 .neon_local/
+
+# test coverage
+coverage/
+
