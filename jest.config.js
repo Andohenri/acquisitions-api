@@ -1,13 +1,13 @@
 export default {
   // Use node environment for testing
   testEnvironment: 'node',
-  
+
   // Support ES modules
   preset: null,
-  
+
   // Transform configuration for ES modules
   transform: {},
-  
+
   // Module name mapping for path aliases (correct property name)
   moduleNameMapper: {
     '^#config/(.*)$': '<rootDir>/src/config/$1',
@@ -19,14 +19,10 @@ export default {
     '^#utils/(.*)$': '<rootDir>/src/utils/$1',
     '^#validations/(.*)$': '<rootDir>/src/validations/$1',
   },
-  
+
   // Test file patterns
-  testMatch: [
-    '**/tests/**/*.test.js',
-    '**/__tests__/**/*.js',
-    '**/*.test.js'
-  ],
-  
+  testMatch: ['**/tests/**/*.test.js', '**/__tests__/**/*.js', '**/*.test.js'],
+
   // Coverage settings
   collectCoverageFrom: [
     'src/**/*.js',
@@ -34,21 +30,21 @@ export default {
     '!src/server.js',
     '!**/__tests__/**',
     '!**/tests/**',
-    '!**/node_modules/**'
+    '!**/node_modules/**',
   ],
-  
+
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-  
+
   // Test timeout
   testTimeout: 10000,
-  
+
   // Verbose output
   verbose: true,
-  
+
   // Globals for test environment
   globals: {
     'process.env.NODE_ENV': 'test',
-    'process.env.ARCJET_ENV': 'development'
-  }
+    'process.env.ARCJET_ENV': 'development',
+  },
 };

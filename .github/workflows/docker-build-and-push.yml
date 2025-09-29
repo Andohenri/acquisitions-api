@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,6 +21,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Verify Docker Hub repository
+        run: |
+          echo "Docker username: ${{ secrets.DOCKER_USERNAME }}"
+          echo "Target repository: ${{ secrets.DOCKER_USERNAME }}/acquisitions-api"
+          echo "Verifying Docker Hub access..."
+          docker pull hello-world > /dev/null 2>&1 && echo "✅ Docker Hub connection successful" || echo "⚠️ Docker Hub connection test failed"
 
       - name: Extract metadata
         id: meta
@@ -67,14 +74,14 @@ jobs:
           echo "- **Build Args:** \`NODE_ENV=production\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🏷️ Published Tags:" >> $GITHUB_STEP_SUMMARY
-          
+
           # Extract and display tags
           TAGS="${{ steps.meta.outputs.tags }}"
           IFS=$'\n'
           for tag in $TAGS; do
             echo "- \`$tag\`" >> $GITHUB_STEP_SUMMARY
           done
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🚀 Usage:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -98,6 +105,10 @@ jobs:
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🔒 Security Recommendations:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Required Secrets Configuration:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`DOCKER_USERNAME\`: Your Docker Hub username" >> $GITHUB_STEP_SUMMARY
+          echo "- \`DOCKER_PASSWORD\`: Your Docker Hub Access Token (not password)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Consider running security scans on your Docker images:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

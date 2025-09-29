@@ -22,7 +22,7 @@ export const getUsers = async () => {
   }
 };
 
-export const getUserById = async (id) => {
+export const getUserById = async id => {
   try {
     const [user] = await db
       .select({
@@ -53,18 +53,18 @@ export const updateUser = async (id, updates) => {
   try {
     // Check if user exists
     const existingUser = await getUserById(id);
-    
+
     // Prepare update data
     const updateData = { ...updates };
-    
+
     // Hash password if provided
     if (updateData.password) {
       updateData.password = await bcrypt.hash(updateData.password, 10);
     }
-    
+
     // Update timestamp
     updateData.updatedAt = new Date();
-    
+
     // Check for email uniqueness if email is being updated
     if (updateData.email && updateData.email !== existingUser.email) {
       const [emailExists] = await db
@@ -72,7 +72,7 @@ export const updateUser = async (id, updates) => {
         .from(users)
         .where(eq(users.email, updateData.email))
         .limit(1);
-      
+
       if (emailExists) {
         throw new Error('Email already exists');
       }
@@ -99,11 +99,11 @@ export const updateUser = async (id, updates) => {
   }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async id => {
   try {
     // Check if user exists
     await getUserById(id);
-    
+
     const [deletedUser] = await db
       .delete(users)
       .where(eq(users.id, id))

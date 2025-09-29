@@ -27,7 +27,8 @@ console.error = (...args) => {
 };
 
 // Set test database URL if needed
-process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgres://test:test@localhost:5432/test_db';
+process.env.DATABASE_URL =
+  process.env.DATABASE_URL || 'postgres://test:test@localhost:5432/test_db';
 
 // Set test JWT secret
 process.env.JWT_SECRET = 'test-jwt-secret-key';

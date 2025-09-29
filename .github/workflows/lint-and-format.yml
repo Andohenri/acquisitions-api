@@ -9,10 +9,18 @@ on:
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Ensure consistent line endings
+          autocrlf: false
+
+      - name: Setup Git line endings
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

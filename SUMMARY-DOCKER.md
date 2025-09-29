@@ -5,6 +5,7 @@ This document provides a comprehensive overview of the Docker setup for the Acqu
 ## 📋 Overview
 
 ### Development Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                Development Environment                  │
@@ -21,6 +22,7 @@ This document provides a comprehensive overview of the Docker setup for the Acqu
 ```
 
 ### Production Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                Production Environment                   │
@@ -40,6 +42,7 @@ This document provides a comprehensive overview of the Docker setup for the Acqu
 │   └───────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
 ```
+
 # Docker Setup Guide for Acquisitions API
 
 This guide explains how to run the Acquisitions API using Docker with different configurations for development and production environments.

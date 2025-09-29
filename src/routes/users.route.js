@@ -1,11 +1,14 @@
 import express from 'express';
-import { 
-  getAllUsers, 
-  getUserByIdController, 
-  updateUserController, 
-  deleteUserController 
+import {
+  getAllUsers,
+  getUserByIdController,
+  updateUserController,
+  deleteUserController,
 } from '#controllers/users.controller.js';
-import { authenticateToken, requireRole } from '#middlewares/auth.middleware.js';
+import {
+  authenticateToken,
+  requireRole,
+} from '#middlewares/auth.middleware.js';
 
 const router = express.Router();
 
