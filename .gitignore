@@ -3,10 +3,8 @@ dist/
 .env
 
 # Environment files
-.env.local
-.env.development.local
-.env.production.local
-.env.prod
+.env.development
+.env.production
 
 # Docker volumes
 docker-volumes/
